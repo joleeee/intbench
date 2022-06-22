@@ -2,7 +2,7 @@
 extern crate test;
 
 #[allow(dead_code)]
-fn fib<N: Number>(times: u32) -> N{
+fn fib<N: Number>(times: u32) -> N {
     let mut last = N::one();
     let mut buffer;
     let mut current = N::zero();
