@@ -1,0 +1,17 @@
+[package]
+name = "types-bench"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ethereum-types = "0.13.1"
+num-traits = "0.2.15"
+
+[profile.production]
+incremental = false
+inherits = "release"
+panic = "abort"
+codegen-units = 1
+lto = true
