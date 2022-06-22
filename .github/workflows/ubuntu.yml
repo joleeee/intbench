@@ -23,6 +23,6 @@ jobs:
           toolchain: nightly
           override: true
       - name: build
-        run: cargo build
+        run: cargo bench --no-run
       - name: benchmark
         run: cargo bench
