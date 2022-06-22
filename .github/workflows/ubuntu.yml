@@ -20,7 +20,7 @@ jobs:
       - name: Install rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: unstable
+          toolchain: nightly
           override: true
       - name: build
         run: cargo build
