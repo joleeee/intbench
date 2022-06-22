@@ -24,5 +24,5 @@ jobs:
           override: true
       - name: build
         run: cargo build
-      - name: test
-        run: cargo test
+      - name: benchmark
+        run: cargo bench
