@@ -80,28 +80,28 @@ mod tests {
     #[bench]
     fn fib_u32(b: &mut Bencher) {
         b.iter(|| {
-            black_box(fib::<u32>(FIBN));
+            black_box(fib::<u32>(black_box(FIBN)));
         })
     }
 
     #[bench]
     fn fib_u128(b: &mut Bencher) {
         b.iter(|| {
-            black_box(fib::<u32>(FIBN));
+            black_box(fib::<u32>(black_box(FIBN)));
         })
     }
 
     #[bench]
     fn fib_u128_big(b: &mut Bencher) {
         b.iter(|| {
-            black_box(fib::<ethereum_types::U128>(FIBN));
+            black_box(fib::<ethereum_types::U128>(black_box(FIBN)));
         })
     }
 
     #[bench]
     fn fib_u256_big(b: &mut Bencher) {
         b.iter(|| {
-            black_box(fib::<ethereum_types::U256>(FIBN));
+            black_box(fib::<ethereum_types::U256>(black_box(FIBN)));
         })
     }
 }
