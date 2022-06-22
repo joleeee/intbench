@@ -1,0 +1,28 @@
+name: ubuntu
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout and submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      - name: build
+        run: cargo build
+      - name: test
+        run: cargo test
