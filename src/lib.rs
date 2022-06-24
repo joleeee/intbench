@@ -70,38 +70,35 @@ impl Number for ethereum_types::U256 {
     }
 }
 
+#[allow(unused_macros)]
+macro_rules! impl_fib {
+    ($type:ty) => {
+        paste::paste! {
+            #[bench]
+            fn [<_ $type _>](b: &mut super::Bencher) {
+                use super::*;
+                b.iter(|| {
+                    black_box(fib::<$type>(black_box(FIBN)));
+                })
+            }
+        }
+    };
+}
+
 #[cfg(test)]
-mod tests {
+mod fib {
     use crate::*;
     use test::{black_box, Bencher};
 
     const FIBN: u32 = 10_000;
 
-    #[bench]
-    fn fib_u32(b: &mut Bencher) {
-        b.iter(|| {
-            black_box(fib::<u32>(black_box(FIBN)));
-        })
+    mod native {
+        impl_fib!(u32);
+        impl_fib!(u128);
     }
-
-    #[bench]
-    fn fib_u128(b: &mut Bencher) {
-        b.iter(|| {
-            black_box(fib::<u32>(black_box(FIBN)));
-        })
-    }
-
-    #[bench]
-    fn fib_u128_big(b: &mut Bencher) {
-        b.iter(|| {
-            black_box(fib::<ethereum_types::U128>(black_box(FIBN)));
-        })
-    }
-
-    #[bench]
-    fn fib_u256_big(b: &mut Bencher) {
-        b.iter(|| {
-            black_box(fib::<ethereum_types::U256>(black_box(FIBN)));
-        })
+    mod ethereum {
+        use {ethereum_types::U128 as u128, ethereum_types::U256 as u256};
+        impl_fib!(u128);
+        impl_fib!(u256);
     }
 }
