@@ -3,9 +3,9 @@ extern crate test;
 
 #[allow(dead_code)]
 fn fib<N: Number>(times: u32) -> N {
-    let mut last = N::one();
+    let mut last = N::from(1);
     let mut buffer;
-    let mut current = N::zero();
+    let mut current = N::from(1);
 
     for _ in 0..times {
         buffer = last;
@@ -17,19 +17,15 @@ fn fib<N: Number>(times: u32) -> N {
 }
 
 trait Number: Copy {
-    fn one() -> Self;
-    fn zero() -> Self;
+    fn from(f: u32) -> Self;
     fn overflowing_add(self, rhs: Self) -> Self;
 }
 
 macro_rules! impl_num_native {
     ($type:ty) => {
         impl Number for $type {
-            fn one() -> Self {
-                1
-            }
-            fn zero() -> Self {
-                0
+            fn from(f: u32) -> Self {
+                f as $type
             }
             fn overflowing_add(self, rhs: Self) -> Self {
                 self.overflowing_add(rhs).0
@@ -47,11 +43,8 @@ macro_rules! impl_num_eth {
             fn overflowing_add(self, rhs: Self) -> Self {
                 self.overflowing_add(rhs).0
             }
-            fn zero() -> Self {
-                Self::zero()
-            }
-            fn one() -> Self {
-                Self::one()
+            fn from(f: u32) -> Self {
+                <Self as From<u32>>::from(f)
             }
         }
     };
