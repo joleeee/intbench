@@ -9,7 +9,7 @@ fn fib<N: Number>(times: u32) -> N {
 
     for _ in 0..times {
         buffer = last;
-        last = current;
+        last = current.clone();
         current = current.overflowing_add(buffer);
     }
 
@@ -21,8 +21,8 @@ fn three_n_one<N: Number>(start: u32) -> N {
     let mut current = N::from(start);
 
     while current != N::from(1) {
-        if current % N::from(2) == N::from(0) {
-            current = current / N::from(2);
+        if current.clone() % N::from(2) == N::from(0) {
+            current = current.clone() / N::from(2);
         } else {
             current = current * N::from(3) + N::from(1);
         }
@@ -32,7 +32,7 @@ fn three_n_one<N: Number>(start: u32) -> N {
 }
 
 trait Number:
-    Copy
+    Clone
     + PartialEq
     + std::ops::Div<Output = Self>
     + std::ops::Mul<Output = Self>
@@ -70,6 +70,15 @@ macro_rules! impl_num_eth {
             }
         }
     };
+}
+
+impl Number for zkp_u256::U256 {
+    fn overflowing_add(self, rhs: Self) -> Self {
+        self + rhs
+    }
+    fn from(f: u32) -> Self {
+        <Self as From<u32>>::from(f)
+    }
 }
 
 impl_num_eth!(ethereum_types::U64);
@@ -125,6 +134,10 @@ mod fib {
         impl_fib!(u128);
         impl_fib!(u256);
     }
+    mod zkp {
+        use zkp_u256::U256 as u256;
+        impl_fib!(u256);
+    }
 }
 
 #[cfg(test)]
@@ -144,6 +157,10 @@ mod three_n_one {
         };
         impl_three_n_one!(u64);
         impl_three_n_one!(u128);
+        impl_three_n_one!(u256);
+    }
+    mod zkp {
+        use zkp_u256::U256 as u256;
         impl_three_n_one!(u256);
     }
 }
