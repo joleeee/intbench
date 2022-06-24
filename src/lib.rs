@@ -22,53 +22,43 @@ trait Number: Copy {
     fn overflowing_add(self, rhs: Self) -> Self;
 }
 
-impl Number for u32 {
-    fn one() -> Self {
-        1
-    }
-    fn zero() -> Self {
-        0
-    }
-    fn overflowing_add(self, rhs: Self) -> Self {
-        self.overflowing_add(rhs).0
-    }
+macro_rules! impl_num_native {
+    ($type:ty) => {
+        impl Number for $type {
+            fn one() -> Self {
+                1
+            }
+            fn zero() -> Self {
+                0
+            }
+            fn overflowing_add(self, rhs: Self) -> Self {
+                self.overflowing_add(rhs).0
+            }
+        }
+    };
 }
 
-impl Number for u128 {
-    fn one() -> Self {
-        1
-    }
-    fn zero() -> Self {
-        0
-    }
-    fn overflowing_add(self, rhs: Self) -> Self {
-        self.overflowing_add(rhs).0
-    }
+impl_num_native!(u32);
+impl_num_native!(u128);
+
+macro_rules! impl_num_eth {
+    ($type:ty) => {
+        impl Number for $type {
+            fn overflowing_add(self, rhs: Self) -> Self {
+                self.overflowing_add(rhs).0
+            }
+            fn zero() -> Self {
+                Self::zero()
+            }
+            fn one() -> Self {
+                Self::one()
+            }
+        }
+    };
 }
 
-impl Number for ethereum_types::U128 {
-    fn overflowing_add(self, rhs: Self) -> Self {
-        self.overflowing_add(rhs).0
-    }
-    fn zero() -> Self {
-        Self::zero()
-    }
-    fn one() -> Self {
-        Self::one()
-    }
-}
-
-impl Number for ethereum_types::U256 {
-    fn overflowing_add(self, rhs: Self) -> Self {
-        self.overflowing_add(rhs).0
-    }
-    fn zero() -> Self {
-        Self::zero()
-    }
-    fn one() -> Self {
-        Self::one()
-    }
-}
+impl_num_eth!(ethereum_types::U256);
+impl_num_eth!(ethereum_types::U128);
 
 #[allow(unused_macros)]
 macro_rules! impl_fib {
