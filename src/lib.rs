@@ -56,7 +56,7 @@ macro_rules! impl_num_native {
     };
 }
 
-impl_num_native!(u32);
+impl_num_native!(u64);
 impl_num_native!(u128);
 
 macro_rules! impl_num_eth {
@@ -72,8 +72,9 @@ macro_rules! impl_num_eth {
     };
 }
 
-impl_num_eth!(ethereum_types::U256);
+impl_num_eth!(ethereum_types::U64);
 impl_num_eth!(ethereum_types::U128);
+impl_num_eth!(ethereum_types::U256);
 
 #[allow(unused_macros)]
 macro_rules! impl_fib {
@@ -113,11 +114,14 @@ mod fib {
     const FIBN: u32 = 10_000;
 
     mod native {
-        impl_fib!(u32);
+        impl_fib!(u64);
         impl_fib!(u128);
     }
     mod ethereum {
-        use {ethereum_types::U128 as u128, ethereum_types::U256 as u256};
+        use {
+            ethereum_types::U128 as u128, ethereum_types::U256 as u256, ethereum_types::U64 as u64,
+        };
+        impl_fib!(u64);
         impl_fib!(u128);
         impl_fib!(u256);
     }
@@ -131,11 +135,14 @@ mod three_n_one {
     const START: u32 = 27;
 
     mod native {
-        impl_three_n_one!(u32);
+        impl_three_n_one!(u64);
         impl_three_n_one!(u128);
     }
     mod ethereum {
-        use {ethereum_types::U128 as u128, ethereum_types::U256 as u256};
+        use {
+            ethereum_types::U128 as u128, ethereum_types::U256 as u256, ethereum_types::U64 as u64,
+        };
+        impl_three_n_one!(u64);
         impl_three_n_one!(u128);
         impl_three_n_one!(u256);
     }
