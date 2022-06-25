@@ -1,5 +1,5 @@
 #[derive(Debug, Copy, Clone)]
-pub struct U256([u128; 2]);
+pub struct U256(pub [u128; 2]);
 
 impl U256 {
     pub fn from_limbs(limbs: [u128; 2]) -> Self {
