@@ -6,6 +6,8 @@ use algo::*;
 
 mod types;
 
+mod speedint;
+
 #[allow(unused_macros)]
 macro_rules! bench_fib {
     ($type:ty) => {

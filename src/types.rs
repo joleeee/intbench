@@ -42,3 +42,17 @@ pub mod native {
     impl_num!(u64);
     impl_num!(u128);
 }
+
+pub mod speed {
+    pub use crate::speedint::U256 as u256;
+    use crate::Number;
+
+    impl Number for u256 {
+        fn overflowing_add(self, rhs: Self) -> Self {
+            self.add_inline(&rhs)
+        }
+        fn from(f: u32) -> Self {
+            Self::from_limbs([f as u128, 0])
+        }
+    }
+}
