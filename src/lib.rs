@@ -55,6 +55,10 @@ mod fib {
         bench_fib!(u128);
         bench_fib!(u256);
     }
+    mod speedint {
+        use crate::types::speed::u256;
+        bench_fib!(u256);
+    }
 }
 
 #[cfg(test)]
