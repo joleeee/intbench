@@ -6,6 +6,8 @@ use algo::*;
 
 mod types;
 
+mod speedint;
+
 #[allow(unused_macros)]
 macro_rules! bench_fib {
     ($type:ty) => {
@@ -52,6 +54,39 @@ mod fib {
         bench_fib!(u64);
         bench_fib!(u128);
         bench_fib!(u256);
+    }
+    mod speedint {
+        use crate::types::speed::u256;
+        bench_fib!(u256);
+    }
+}
+
+#[cfg(test)]
+mod fib_check {
+    use crate::algo::fib;
+    use crate::types;
+
+    use types::ethereum::u256 as eth256;
+    use types::speed::u256 as speed256;
+
+    #[test]
+    fn equal_test() {
+        // ~41, ~84, max bits
+        let nums = [60, 120, 100_000];
+        for n in nums {
+            println!("{}", fib::<eth256>(n));
+            assert!(equal(n)); // fits in u64
+        }
+    }
+
+    fn equal(fibn: u32) -> bool {
+        let eth = fib::<eth256>(fibn).0;
+        let speed = fib::<speed256>(fibn).0;
+
+        let eth_lower = (eth[0] as u128) + ((eth[1] as u128) << 64);
+        let eth_upper = (eth[2] as u128) + ((eth[3] as u128) << 64);
+
+        eth_lower == speed[0] && eth_upper == speed[1]
     }
 }
 
