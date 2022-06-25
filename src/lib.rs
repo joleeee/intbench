@@ -7,7 +7,7 @@ use algo::*;
 mod types;
 
 #[allow(unused_macros)]
-macro_rules! impl_fib {
+macro_rules! bench_fib {
     ($type:ty) => {
         paste::paste! {
             #[bench]
@@ -22,7 +22,7 @@ macro_rules! impl_fib {
 }
 
 #[allow(unused_macros)]
-macro_rules! impl_three_n_one {
+macro_rules! bench_3np1 {
     ($type:ty) => {
         paste::paste! {
             #[bench]
@@ -44,14 +44,14 @@ mod fib {
     const FIBN: u32 = 10_000;
 
     mod native {
-        impl_fib!(u64);
-        impl_fib!(u128);
+        bench_fib!(u64);
+        bench_fib!(u128);
     }
     mod ethereum {
         use crate::types::ethereum::{u128, u256, u64};
-        impl_fib!(u64);
-        impl_fib!(u128);
-        impl_fib!(u256);
+        bench_fib!(u64);
+        bench_fib!(u128);
+        bench_fib!(u256);
     }
 }
 
@@ -64,13 +64,13 @@ mod three_n_one {
 
     mod native {
         use crate::types::native::{u128, u64};
-        impl_three_n_one!(u64);
-        impl_three_n_one!(u128);
+        bench_3np1!(u64);
+        bench_3np1!(u128);
     }
     mod ethereum {
         use crate::types::ethereum::{u128, u256, u64};
-        impl_three_n_one!(u64);
-        impl_three_n_one!(u128);
-        impl_three_n_one!(u256);
+        bench_3np1!(u64);
+        bench_3np1!(u128);
+        bench_3np1!(u256);
     }
 }
