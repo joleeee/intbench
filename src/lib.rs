@@ -71,17 +71,12 @@ mod fib_check {
 
     #[test]
     fn equal_test() {
-        // ~41 bits
-        println!("{}", fib::<eth256>(60));
-        assert!(equal(60)); // fits in u64
-
-        // ~84 bits
-        println!("{}", fib::<eth256>(120));
-        assert!(equal(120));
-
-        // max
-        println!("{}", fib::<eth256>(100_000));
-        assert!(equal(100_000));
+        // ~41, ~84, max bits
+        let nums = [60, 120, 100_000];
+        for n in nums {
+            println!("{}", fib::<eth256>(n));
+            assert!(equal(n)); // fits in u64
+        }
     }
 
     fn equal(fibn: u32) -> bool {
