@@ -1,6 +1,8 @@
 #![feature(test)]
 extern crate test;
 
+use std::ops::{Add, Div, Mul, Rem};
+
 #[allow(dead_code)]
 fn fib<N: Number>(times: u32) -> N {
     let mut last = N::from(1);
@@ -17,7 +19,11 @@ fn fib<N: Number>(times: u32) -> N {
 }
 
 #[allow(dead_code)]
-fn three_n_one<N: Number>(start: u32) -> N {
+fn three_n_one<
+    N: Number + PartialEq + Div<Output = N> + Mul<Output = N> + Add<Output = N> + Rem<Output = N>,
+>(
+    start: u32,
+) -> N {
     let mut current = N::from(start);
 
     while current != N::from(1) {
@@ -31,14 +37,7 @@ fn three_n_one<N: Number>(start: u32) -> N {
     current
 }
 
-trait Number:
-    Copy
-    + PartialEq
-    + std::ops::Div<Output = Self>
-    + std::ops::Mul<Output = Self>
-    + std::ops::Add<Output = Self>
-    + std::ops::Rem<Output = Self>
-{
+trait Number: Clone + Copy {
     fn from(f: u32) -> Self;
     fn overflowing_add(self, rhs: Self) -> Self;
 }
