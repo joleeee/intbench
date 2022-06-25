@@ -1,82 +1,13 @@
 #![feature(test)]
 extern crate test;
 
-use std::ops::{Add, Div, Mul, Rem};
+mod algo;
+use algo::*;
 
-#[allow(dead_code)]
-fn fib<N: Number>(times: u32) -> N {
-    let mut last = N::from(1);
-    let mut buffer;
-    let mut current = N::from(1);
-
-    for _ in 0..times {
-        buffer = last;
-        last = current;
-        current = current.overflowing_add(buffer);
-    }
-
-    current
-}
-
-#[allow(dead_code)]
-fn three_n_one<
-    N: Number + PartialEq + Div<Output = N> + Mul<Output = N> + Add<Output = N> + Rem<Output = N>,
->(
-    start: u32,
-) -> N {
-    let mut current = N::from(start);
-
-    while current != N::from(1) {
-        if current % N::from(2) == N::from(0) {
-            current = current / N::from(2);
-        } else {
-            current = current * N::from(3) + N::from(1);
-        }
-    }
-
-    current
-}
-
-trait Number: Clone + Copy {
-    fn from(f: u32) -> Self;
-    fn overflowing_add(self, rhs: Self) -> Self;
-}
-
-macro_rules! impl_num_native {
-    ($type:ty) => {
-        impl Number for $type {
-            fn from(f: u32) -> Self {
-                f as $type
-            }
-            fn overflowing_add(self, rhs: Self) -> Self {
-                self.overflowing_add(rhs).0
-            }
-        }
-    };
-}
-
-impl_num_native!(u64);
-impl_num_native!(u128);
-
-macro_rules! impl_num_eth {
-    ($type:ty) => {
-        impl Number for $type {
-            fn overflowing_add(self, rhs: Self) -> Self {
-                self.overflowing_add(rhs).0
-            }
-            fn from(f: u32) -> Self {
-                <Self as From<u32>>::from(f)
-            }
-        }
-    };
-}
-
-impl_num_eth!(ethereum_types::U64);
-impl_num_eth!(ethereum_types::U128);
-impl_num_eth!(ethereum_types::U256);
+mod types;
 
 #[allow(unused_macros)]
-macro_rules! impl_fib {
+macro_rules! bench_fib {
     ($type:ty) => {
         paste::paste! {
             #[bench]
@@ -91,7 +22,7 @@ macro_rules! impl_fib {
 }
 
 #[allow(unused_macros)]
-macro_rules! impl_three_n_one {
+macro_rules! bench_3np1 {
     ($type:ty) => {
         paste::paste! {
             #[bench]
@@ -113,16 +44,14 @@ mod fib {
     const FIBN: u32 = 10_000;
 
     mod native {
-        impl_fib!(u64);
-        impl_fib!(u128);
+        bench_fib!(u64);
+        bench_fib!(u128);
     }
     mod ethereum {
-        use {
-            ethereum_types::U128 as u128, ethereum_types::U256 as u256, ethereum_types::U64 as u64,
-        };
-        impl_fib!(u64);
-        impl_fib!(u128);
-        impl_fib!(u256);
+        use crate::types::ethereum::{u128, u256, u64};
+        bench_fib!(u64);
+        bench_fib!(u128);
+        bench_fib!(u256);
     }
 }
 
@@ -134,15 +63,14 @@ mod three_n_one {
     const START: u32 = 27;
 
     mod native {
-        impl_three_n_one!(u64);
-        impl_three_n_one!(u128);
+        use crate::types::native::{u128, u64};
+        bench_3np1!(u64);
+        bench_3np1!(u128);
     }
     mod ethereum {
-        use {
-            ethereum_types::U128 as u128, ethereum_types::U256 as u256, ethereum_types::U64 as u64,
-        };
-        impl_three_n_one!(u64);
-        impl_three_n_one!(u128);
-        impl_three_n_one!(u256);
+        use crate::types::ethereum::{u128, u256, u64};
+        bench_3np1!(u64);
+        bench_3np1!(u128);
+        bench_3np1!(u256);
     }
 }
