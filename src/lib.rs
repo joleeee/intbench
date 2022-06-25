@@ -5,23 +5,6 @@ mod algo;
 use algo::*;
 
 mod types;
-use types::*;
-
-macro_rules! impl_num_native {
-    ($type:ty) => {
-        impl Number for $type {
-            fn from(f: u32) -> Self {
-                f as $type
-            }
-            fn overflowing_add(self, rhs: Self) -> Self {
-                self.overflowing_add(rhs).0
-            }
-        }
-    };
-}
-
-impl_num_native!(u64);
-impl_num_native!(u128);
 
 #[allow(unused_macros)]
 macro_rules! impl_fib {
@@ -80,6 +63,7 @@ mod three_n_one {
     const START: u32 = 27;
 
     mod native {
+        use crate::types::native::{u128, u64};
         impl_three_n_one!(u64);
         impl_three_n_one!(u128);
     }
