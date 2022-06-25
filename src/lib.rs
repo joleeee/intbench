@@ -4,6 +4,9 @@ extern crate test;
 mod algo;
 use algo::*;
 
+mod types;
+use types::*;
+
 macro_rules! impl_num_native {
     ($type:ty) => {
         impl Number for $type {
@@ -19,23 +22,6 @@ macro_rules! impl_num_native {
 
 impl_num_native!(u64);
 impl_num_native!(u128);
-
-macro_rules! impl_num_eth {
-    ($type:ty) => {
-        impl Number for $type {
-            fn overflowing_add(self, rhs: Self) -> Self {
-                self.overflowing_add(rhs).0
-            }
-            fn from(f: u32) -> Self {
-                <Self as From<u32>>::from(f)
-            }
-        }
-    };
-}
-
-impl_num_eth!(ethereum_types::U64);
-impl_num_eth!(ethereum_types::U128);
-impl_num_eth!(ethereum_types::U256);
 
 #[allow(unused_macros)]
 macro_rules! impl_fib {
@@ -79,9 +65,7 @@ mod fib {
         impl_fib!(u128);
     }
     mod ethereum {
-        use {
-            ethereum_types::U128 as u128, ethereum_types::U256 as u256, ethereum_types::U64 as u64,
-        };
+        use crate::types::ethereum::{u128, u256, u64};
         impl_fib!(u64);
         impl_fib!(u128);
         impl_fib!(u256);
@@ -100,9 +84,7 @@ mod three_n_one {
         impl_three_n_one!(u128);
     }
     mod ethereum {
-        use {
-            ethereum_types::U128 as u128, ethereum_types::U256 as u256, ethereum_types::U64 as u64,
-        };
+        use crate::types::ethereum::{u128, u256, u64};
         impl_three_n_one!(u64);
         impl_three_n_one!(u128);
         impl_three_n_one!(u256);
