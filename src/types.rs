@@ -5,7 +5,8 @@ pub mod ethereum {
     };
 
     macro_rules! impl_num {
-        ($type:ty) => {
+        ($($type:ty )*) => {
+            $(
             impl Number for $type {
                 fn overflowing_add(self, rhs: Self) -> Self {
                     self.overflowing_add(rhs).0
@@ -14,12 +15,11 @@ pub mod ethereum {
                     <Self as From<u32>>::from(f)
                 }
             }
+            )*
         };
     }
 
-    impl_num!(u64);
-    impl_num!(u128);
-    impl_num!(u256);
+    impl_num!(u64 u128 u256);
 }
 
 pub mod native {
@@ -27,7 +27,8 @@ pub mod native {
     pub use {u128, u64};
 
     macro_rules! impl_num {
-        ($type:ty) => {
+        ($($type:ty )*) => {
+            $(
             impl Number for $type {
                 fn from(f: u32) -> Self {
                     f as $type
@@ -36,11 +37,11 @@ pub mod native {
                     self.overflowing_add(rhs).0
                 }
             }
+            )*
         };
     }
 
-    impl_num!(u64);
-    impl_num!(u128);
+    impl_num!(u64 u128);
 }
 
 pub mod speed {
@@ -64,7 +65,8 @@ pub mod ru {
     use crate::Number;
 
     macro_rules! impl_ru {
-        ($type:ty) => {
+        ($($type:ty )*) => {
+            $(
             impl Number for $type {
                 fn overflowing_add(self, rhs: Self) -> Self {
                     self.overflowing_add(rhs).0
@@ -73,9 +75,9 @@ pub mod ru {
                     Self::from(f)
                 }
             }
+            )*
         };
     }
 
-    impl_ru!(u128);
-    impl_ru!(u256);
+    impl_ru!(u128 u256);
 }
