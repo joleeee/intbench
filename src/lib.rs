@@ -60,7 +60,8 @@ mod fib {
         bench_fib!(u256);
     }
     mod ru {
-        use crate::types::ru::u256;
+        use crate::types::ru::{u128, u256};
+        bench_fib!(u128);
         bench_fib!(u256);
     }
 }
@@ -113,7 +114,8 @@ mod three_n_one {
         bench_3np1!(u256);
     }
     mod ru {
-        use crate::types::ru::u256;
+        use crate::types::ru::{u128, u256};
+        bench_3np1!(u128);
         bench_3np1!(u256);
     }
 }

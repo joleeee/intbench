@@ -57,17 +57,25 @@ pub mod speed {
     }
 }
 
+#[allow(non_camel_case_types)]
 pub mod ru {
-    #[allow(non_camel_case_types)]
     pub type u256 = ruint::Uint<256, 4>;
+    pub type u128 = ruint::Uint<128, 2>;
     use crate::Number;
 
-    impl Number for u256 {
-        fn overflowing_add(self, rhs: Self) -> Self {
-            self.overflowing_add(rhs).0
-        }
-        fn from(f: u32) -> Self {
-            Self::from(f)
-        }
+    macro_rules! impl_ru {
+        ($type:ty) => {
+            impl Number for $type {
+                fn overflowing_add(self, rhs: Self) -> Self {
+                    self.overflowing_add(rhs).0
+                }
+                fn from(f: u32) -> Self {
+                    Self::from(f)
+                }
+            }
+        };
     }
+
+    impl_ru!(u128);
+    impl_ru!(u256);
 }
