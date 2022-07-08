@@ -56,3 +56,18 @@ pub mod speed {
         }
     }
 }
+
+pub mod ru {
+    #[allow(non_camel_case_types)]
+    pub type u256 = ruint::Uint<256, 4>;
+    use crate::Number;
+
+    impl Number for u256 {
+        fn overflowing_add(self, rhs: Self) -> Self {
+            self.overflowing_add(rhs).0
+        }
+        fn from(f: u32) -> Self {
+            Self::from(f)
+        }
+    }
+}

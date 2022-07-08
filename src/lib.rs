@@ -59,6 +59,10 @@ mod fib {
         use crate::types::speed::u256;
         bench_fib!(u256);
     }
+    mod ru {
+        use crate::types::ru::u256;
+        bench_fib!(u256);
+    }
 }
 
 #[cfg(test)]
@@ -106,6 +110,10 @@ mod three_n_one {
         use crate::types::ethereum::{u128, u256, u64};
         bench_3np1!(u64);
         bench_3np1!(u128);
+        bench_3np1!(u256);
+    }
+    mod ru {
+        use crate::types::ru::u256;
         bench_3np1!(u256);
     }
 }
